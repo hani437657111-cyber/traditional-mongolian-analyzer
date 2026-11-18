@@ -249,15 +249,15 @@ if st.button("Start detection"):
         )
 
         st.write(
-            f"After Removing whitspace：**{count_without_spaces}**"
+            f"After Removing Whitspace：**{count_without_spaces}**"
         )
 
         st.write(
-            f"After Excluding Specified Affix/Suffix：**{final_count}**"
+            f"After Excluding Specified Affixes/Suffixes:**{final_count}**"
         )
 
         st.write(
-            f"Total Reduction:**{difference}**"code point")
+            f"Total Reduction:**{difference}**code points")
 
         st.success(
             "The original text remains unchanged,""The processed text is used only for character counting and comparison.")
