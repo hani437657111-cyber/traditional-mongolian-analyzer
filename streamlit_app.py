@@ -5,26 +5,24 @@ st.set_page_config(
     page_title="Traditional Mongolian Text Analyzer",page_icon="ᠮ",layout="wide")
 
 st.title("Traditional Mongolian Text Analyzer")
-st.write("Traditional Mongolian Text Analyzer")
 
 # =========================
 # 1. Please enter the Mongolian text here
 # =========================
 
-text = st.text_area("Please enter or past Traditioanl Mongolian Text here：",height=250,placeholder="Please enter the Mongolian text here")
+text = st.text_area("Please enter or paste Traditional Mongolian text here：",height=250,placeholder="Please enter the Mongolian text here")
 
 # =========================
 # 2. Affix/suffix rule
 # =========================
 
-st.subheader("Affix/suffix exclution rule")
+st.subheader("Affix/suffix exclusion rules")
 
 st.write(
-    "Please enter or past the affixes or suffixes to be excluded from character counting"
-    "Enter one rule per line, the original text will not be modified.")
+    "Please enter or paste the affixes or suffixes to exclude from character counting."
+    "Enter one rule per line. the original text will not be modified.")
 
-suffix_input = st.text_area(
-    "Suffixes and affixes to be excluded：",height=120,placeholder="例如：\n ᠤ\nᠤ\nᠠ᠋")
+suffix_input = st.text_area("Suffixes and affixes to exclude:",height=120,placeholder="Enter one affix or suffix per line.\nExample：\n ᠤ\nᠤ\nᠠ᠋")
 
 # =========================
 # 3. special Unicode characters
@@ -56,12 +54,7 @@ def analyze_special_characters(text):
 
     for position, char in enumerate(text):
         if char in SPECIAL_CHARS:
-            results.append({
-                "position": position + 1,
-                "character": repr(char),
-                "code_point": f"U+{ord(char):04X}",
-                "name": SPECIAL_CHARS[char]
-            })
+            results.append({"position": position + 1,"character": repr(char),"code_point": f"U+{ord(char):04X}","name": SPECIAL_CHARS[char]})
 
     return results
 
@@ -114,16 +107,11 @@ if st.button("Start detection"):
         # affixes/ suffixes rule
         # ---------------------------------
 
-        suffixes = [
-            line for line in suffix_input.splitlines()
-            if line.strip() != ""
-        ]
+        suffixes = [line for line in suffix_input.splitlines()
+            if line.strip() != ""]
 
         # Continue processing the text after whitespace removal.
-        processed_text = remove_suffixes(
-            text_without_spaces,
-            suffixes
-        )
+        processed_text = remove_suffixes(text_without_spaces,suffixes)
 
         final_count = len(processed_text)
 
@@ -142,31 +130,18 @@ if st.button("Start detection"):
         col1, col2, col3, col4 = st.columns(4)
 
         with col1:
-            st.metric(
-                "Original Code Points",
-                original_count
-            )
+            st.metric("Original Code Points",original_count)
 
         with col2:
-            st.metric(
-                "Whitespace",
-                whitespace_count
-            )
+            st.metric("Whitespace",whitespace_count)
 
         with col3:
-            st.metric(
-                "After Removing Spaces",
-                count_without_spaces
-            )
+            st.metric("After Removing Spaces",count_without_spaces)
 
         with col4:
-            st.metric(
-                "Final Character Count",
-                final_count
-            )
+            st.metric("Final Character Count",final_count)
 
-        st.info(
-            "Note: Character counts here are based on Unicode code points, which do not necessarily correspond to visually perceived glyphs or linguistic characters.")
+        st.info("Note: Character counts here are based on Unicode code points, which do not necessarily correspond to visually perceived glyphs or linguistic characters.")
 
         # ================================
         # Space Detection
@@ -176,18 +151,11 @@ if st.button("Start detection"):
 
         if whitespace_count > 0:
 
-            st.write(
-                f"detected **{whitespace_count}** whitespace character."
-            )
+            st.write(f"detected **{whitespace_count}** whitespace character.")
 
-            st.dataframe(
-                whitespace_positions,
-                use_container_width=True
-            )
+            st.dataframe(whitespace_positions,use_container_width=True)
 
-            st.write(
-                "Whitespace characters are excluded from the final character count,"
-                "but the original text remains unchanged.")
+            st.write("Whitespace characters are excluded from the final character count,""but the original text remains unchanged.")
 
         else:
 
@@ -204,15 +172,11 @@ if st.button("Start detection"):
             st.write(
                 f"detected **{len(special_results)}** special Unicode character。")
 
-            st.dataframe(
-                special_results,
-                use_container_width=True
-            )
+            st.dataframe(special_results,use_container_width=True)
 
         else:
 
-            st.success(
-                "no special  Unicode character listed in this tool were detected.")
+            st.success("no special  Unicode character listed in this tool were detected.")
 
         # ================================
         # Affix / Suffix Exclusion
@@ -225,13 +189,9 @@ if st.button("Start detection"):
             st.write("suffix rule used in this analysis：")
 
             for suffix in suffixes:
-                st.code(
-                    f"{repr(suffix)}   →   {len(suffix)} code point(s)"
-                )
+                st.code(f"{repr(suffix)}   →   {len(suffix)} code point(s)")
 
-            removed_by_suffix = (
-                count_without_spaces - final_count
-            )
+            removed_by_suffix = (count_without_spaces - final_count)
 
             st.write(
                 f"excluded from the statistics based on this rule "
@@ -257,17 +217,9 @@ if st.button("Start detection"):
 
             st.markdown("### Original Text")
 
-            st.text_area(
-                "original text",
-                value=text,
-                height=250,
-                disabled=True,
-                key="original_text"
-            )
+            st.text_area("original text",value=text,height=250,disabled=True,key="original_text")
 
-            st.write(
-                f"Original Code Points: **{original_count}**"
-            )
+            st.write(f"Original Code Points: **{original_count}**")
 
         with col2:
 
