@@ -16,13 +16,13 @@ text = st.text_area("Please enter or paste Traditional Mongolian text here：",h
 # 2. Affix/suffix rule
 # =========================
 
-st.subheader("Affix/suffix exclusion rules")
+st.subheader("Affix/Suffix Exclusion Rules")
 
 st.write(
     "Please enter or paste the affixes or suffixes to exclude from character counting."
-    "Enter one rule per line. the original text will not be modified.")
+    "Enter one rule per line. The original text will not be modified.")
 
-suffix_input = st.text_area("Suffixes and affixes to exclude:",height=120,placeholder="Enter one affix or suffix per line.\nExample：\n ᠤ\nᠤ\nᠠ᠋")
+suffix_input = st.text_area("Suffixes and affixes to exclude:",height=120,placeholder="Enter one affix or suffix per line.\nExample:\n ᠤ\nᠤ\nᠠ᠋")
 
 # =========================
 # 3. special Unicode characters
@@ -107,8 +107,9 @@ if st.button("Start detection"):
         # affixes/ suffixes rule
         # ---------------------------------
 
-        suffixes = [line for line in suffix_input.splitlines()
-            if line.strip() != ""]
+        suffixes = [line.strip()
+                    for line in suffix_input.splitlines()
+                    if line.strip() != ""]
 
         # Continue processing the text after whitespace removal.
         processed_text = remove_suffixes(text_without_spaces,suffixes)
@@ -130,18 +131,18 @@ if st.button("Start detection"):
         col1, col2, col3, col4 = st.columns(4)
 
         with col1:
-            st.metric("Original Code Points",original_count)
+            st.metric("Original UniCode Code Points",original_count)
 
         with col2:
-            st.metric("Whitespace",whitespace_count)
+            st.metric("Whitespace Characters",whitespace_count)
 
         with col3:
-            st.metric("After Removing Spaces",count_without_spaces)
+            st.metric("Code Points After Removing Whitespace",count_without_spaces)
 
         with col4:
             st.metric("Final Character Count",final_count)
 
-        st.info("Note: Character counts here are based on Unicode code points, which do not necessarily correspond to visually perceived glyphs or linguistic characters.")
+        st.info("Note: Character counts are based on Unicode code points, A Unicode code point does not always correspond to one visually perceived""character or Linguistic unit.")
 
         # ================================
         # Space Detection
@@ -151,7 +152,7 @@ if st.button("Start detection"):
 
         if whitespace_count > 0:
 
-            st.write(f"detected **{whitespace_count}** whitespace character.")
+            st.write(f"**{whitespace_count}** whitespace character(s) were detected.")
 
             st.dataframe(whitespace_positions,use_container_width=True)
 
@@ -170,13 +171,13 @@ if st.button("Start detection"):
         if special_results:
 
             st.write(
-                f"detected **{len(special_results)}** special Unicode character。")
+                f"**{len(special_results)}** special Unicode character(s)were detected.")
 
             st.dataframe(special_results,use_container_width=True)
 
         else:
 
-            st.success("no special  Unicode character listed in this tool were detected.")
+            st.success("No special  Unicode character listed in this tool were detected.")
 
         # ================================
         # Affix / Suffix Exclusion
@@ -186,7 +187,7 @@ if st.button("Start detection"):
 
         if suffixes:
 
-            st.write("suffix rule used in this analysis：")
+            st.write("Affix/suffix rules used in this analysis:")
 
             for suffix in suffixes:
                 st.code(f"{repr(suffix)}   →   {len(suffix)} code point(s)")
@@ -194,16 +195,14 @@ if st.button("Start detection"):
             removed_by_suffix = (count_without_spaces - final_count)
 
             st.write(
-                f"excluded from the statistics based on this rule "
-                f"**{removed_by_suffix}** 个 code points。"
-            )
+                f"Excluded from the character count based on these rules "
+                f"**{removed_by_suffix}**code points.")
 
         else:
 
             st.info(
-                "No affix or suffix exclusion rules were entered for this analysis. Therefore,"
-                "no affixes or suffixes were excluded from the statistics."
-            )
+                "No affix or suffix exclusion rules were entered for this analysis."
+                "Therefore,no affixes or suffixes were excluded from the character count.")
 
         # ================================
         # Original vs Processed
@@ -217,9 +216,9 @@ if st.button("Start detection"):
 
             st.markdown("### Original Text")
 
-            st.text_area("original text",value=text,height=250,disabled=True,key="original_text")
+            st.text_area("Original text",value=text,height=250,disabled=True,key="original_text")
 
-            st.write(f"Original Code Points: **{original_count}**")
+            st.write(f"Original Unicode Code Points: **{original_count}**")
 
         with col2:
 
@@ -246,21 +245,19 @@ if st.button("Start detection"):
         difference = original_count - final_count
 
         st.write(
-            f"original Unicode point count：**{original_count}**"
+            f"Original Unicode Code Point Count：**{original_count}**"
         )
 
         st.write(
-            f"after excluding whitspace characters：**{count_without_spaces}**"
+            f"After Removing whitspace：**{count_without_spaces}**"
         )
 
         st.write(
-            f"after excluding specified affix or suffix：**{final_count}**"
+            f"After Excluding Specified Affix/Suffix：**{final_count}**"
         )
 
         st.write(
-            f"final reduction code points：**{difference}**"
-        )
+            f"Total Reduction:**{difference}**"code point")
 
         st.success(
-            "the original text remains unchanged,the processed text is used for character counting and comparison purposes only"
-        )
+            "The original text remains unchanged,""The processed text is used only for character counting and comparison.")
