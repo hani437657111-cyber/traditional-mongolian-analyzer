@@ -11,7 +11,8 @@ st.title("Traditional Mongolian Text Analyzer")
 # =========================
 
 text = st.text_area("Please enter or paste Traditional Mongolian text here：",height=250,placeholder="Please enter the Mongolian text here")
-
+st.write("Font rendering test:")
+st.markdown('<div style="font-family: Mongolian Baiti; font-size: 30px;">ᠮᠣᠩᠭᠣᠯ</div>', unsafe_allow_html=True)
 # =========================
 # 2. Affix/suffix rule
 # =========================
